@@ -18,7 +18,8 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    if (host === APP_SUBDOMAIN || host === 'www.' + APP_SUBDOMAIN) {
+    // app.zeyra.io → Lovable dashboard
+    if (host === APP_SUBDOMAIN) {
       const targetUrl = LOVABLE_URL + req.url;
       console.log(`Proxying to Lovable: ${targetUrl}`);
       const response = await fetch(targetUrl, {
@@ -31,6 +32,7 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    // pages.zeyra.io e domínios customizados → serve-page
     const servePageUrl = `${SUPABASE_URL}/functions/v1/serve-page?custom_domain=${encodeURIComponent(host)}`;
     const response = await fetch(servePageUrl, {
       method: 'GET',
